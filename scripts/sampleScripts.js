@@ -15,8 +15,10 @@ ismatched = null;*/
 
 module.exports = (robot) => {
 	// if (isMatched) {return };
+
+	
   { // respond 'hello'
-    let regexp = new RegExp(/\b(hello|hi|你好)\b/, 'i');
+    let regexp = new RegExp(/\b(hello|hi)\b/, 'i');
     let respon = 'oh, hello there';
     robot.respond(regexp, (res) => {
     	res.reply(respon);
