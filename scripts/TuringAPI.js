@@ -78,6 +78,10 @@ module.exports = (robot) => {
 		(res) => {
 			/*if (!(robot.respondPattern('/(.*)/').test(res.message.text))) { return }*/
 			// res.reply(Turing);
+      res.reply(res.envelope.user.id);
+      res.reply(res.envelope.user.name);
+      res.reply(res.envelope.user.room);
+      res.reply(Object.getOwnPropertyNames(res.envelope.room));
 			Turing(robot, res);
 			// return;
 		}
