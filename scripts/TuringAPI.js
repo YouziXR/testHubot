@@ -1,16 +1,16 @@
 /**
  * 图灵机器人API
  */
-let Turing = function(robot, res) {
+let Turing = function(robot, res, msgText) {
   if (!res.message.text) {
     return;
   }
   let request = require('request');
-  let msgText = res.message.text;
+  // let msgText = res.message.text;
   // msgText = msgText.match(robot.respondPattern('/(.*)/'));
   // res.reply(msgText[1]);
-  
-  let queryWord = msgText;
+
+  let queryWord = msgText.trim();
   // res.reply(queryWord);
   let API = 'http://openapi.tuling123.com/openapi/api/v2';
   let keys = 'ad564df2f8cb44bea93d59524833f348';
@@ -70,20 +70,42 @@ let Turing = function(robot, res) {
 }
 
 module.exports = (robot) => {
-// A limitation in catchAll function, if nothing matches the text, catchAll will be executed. 
-// But if people are talking to other people, not the robot, catchAll will be executed, too. 
-// So at first, we should check the res.message.text to see if it matches robot.respondPattern.
-// robot.respondPattern is a function that returns a regExp to check if the message is sent to the robot, usage is like if statements blow.
-	robot.catchAll(
-		(res) => {
-			/*if (!(robot.respondPattern('/(.*)/').test(res.message.text))) { return }*/
-			// res.reply(Turing);
-      res.reply(res.envelope.user.id);
+  // A limitation in catchAll function, if nothing matches the text, catchAll will be executed. 
+  // But if people are talking to other people, not the robot, catchAll will be executed, too. 
+  // So at first, we should check the res.message.text to see if it matches robot.respondPattern.
+  // robot.respondPattern is a function that returns a regExp to check if the message is sent to the robot, usage is like if statements blow.
+  robot.catchAll(
+    (res) => {
+      /*if (!(robot.respondPattern('/(.*)/').test(res.message.text))) { return }*/
+      // res.reply(Turing);
+      // let envelope = res.envelope;
+
+      // res.reply(`for test: ${Object.getOwnPropertyNames(res.envelope.room)}`);
+      // res.reply(`for test: ${Object.getOwnPropertyNames(res.envelope.user)}`);
+
+      // res.reply(Object.getOwnPropertyNames(res.envelope.room));
+      // res.reply(res.envelope.room.hasOwnProperty(''));
+      if (res.envelope.room != null) {
+        // only respond message with '@robotName' 
+        // res.reply(`in room: ${res.message.text}`);
+        let ary = res.message.text.match(/(@鼬子)(.*)/);
+        if (ary[1]) {
+          let msg = ary[2];
+          Turing(robot, res, msg);
+          return;
+        }
+      }
+      else if (res.envelope.user != null) {
+        // res.reply(`in user: ${res.message.text}`);
+        Turing(robot, res, res.message.text);
+        return;
+      }
+      /*res.reply(res.envelope.user.id);
       res.reply(res.envelope.user.name);
-      res.reply(res.envelope.user.room);
-      res.reply(Object.getOwnPropertyNames(res.envelope.room));
-			Turing(robot, res);
-			// return;
-		}
-		)
+      res.reply(res.envelope.user.room);*/
+      // res.reply(Object.getOwnPropertyNames(res.envelope.room));
+      // Turing(robot, res);
+      // return;
+    }
+  )
 }
