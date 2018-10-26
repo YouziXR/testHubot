@@ -1,6 +1,9 @@
 /**
  * 图灵机器人API
  */
+
+
+
 let Turing = function(robot, res, msgText) {
   if (!res.message.text) {
     return;
@@ -17,6 +20,7 @@ let Turing = function(robot, res, msgText) {
 
   // userId is a user identifier code
   let userid = new Date().getTime().toString(13);
+  // let userid = res.envelope.user.id;
   let Data = {
     reqType: 0,
     perception: {
